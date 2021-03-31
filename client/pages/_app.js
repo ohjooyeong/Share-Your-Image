@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import "antd/dist/antd.css";
 import { createGlobalStyle } from "styled-components";
+import wrapper from "../store/configureStore";
 
 const Global = createGlobalStyle`
 	body {
@@ -29,4 +30,4 @@ ShareYourImage.propTypes = {
     Component: PropTypes.elementType.isRequired,
 };
 
-export default ShareYourImage;
+export default wrapper.withRedux(ShareYourImage);

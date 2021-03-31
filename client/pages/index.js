@@ -117,7 +117,7 @@ const Home = () => {
             houseRef.current.style.transform = `translateZ(${zMove}vw)`;
         }
 
-        function mouseHandler(e) {
+        function mouseMoveHandler(e) {
             const scrollPercent = pageYOffset / maxScrollValue;
             mousePos.x = -1 + (e.clientX / window.innerWidth) * 2;
             mousePos.y = 1 - (e.clientY / window.innerHeight) * 2;
@@ -141,7 +141,7 @@ const Home = () => {
 
         window.addEventListener("scroll", scrollHandler);
 
-        window.addEventListener("mousemove", mouseHandler);
+        window.addEventListener("mousemove", mouseMoveHandler);
 
         return () => {
             window.removeEventListener("resize", resizeHandler);
