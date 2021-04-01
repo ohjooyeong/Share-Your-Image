@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import AppLayout from "../components/AppLayout";
+import { useDispatch, useSelector } from "react-redux";
 import { createGlobalStyle } from "styled-components";
+import PostWall from "../components/PostWall";
 
 // 3D World UI 컴포넌트
 
@@ -49,75 +51,43 @@ const RightWall = styled.div`
     height: 100vh;
     background: rgba(255, 255, 255, 0.8);
     transform-style: preserve-3d;
-    width: 1000vw;
     transform: rotateY(90deg) translateZ(-400vw);
     background: #f8f8f8;
-`;
-
-const FrontWall = styled.div`
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.8);
-    transform-style: preserve-3d;
-    transform: translateZ(300vw);
-`;
-
-const Content = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-weight: 600;
-`;
-
-const ImageWall = styled.div``;
-
-const Title = styled.div`
-    font-size: 5rem;
-`;
-
-const SmallRightWall = styled.div`
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: rgba(255, 255, 255, 0.8);
-    color: black;
-    transform-style: preserve-3d;
-    width: 100vw;
-    height: 100vh;
-    background: inherit;
-    transform: rotateY(270deg) translate3d(50vw, 0, -50vw);
+    width: 1000vw;
 `;
 
 const Global = createGlobalStyle`
 	body {
-		height: 500vh;
-	}
+		height: ${(props) => `${props.postLength * 80}vh`}
+    }
 `;
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const { mainPosts } = useSelector((state) => state.post);
     const stageRef = useRef();
     const houseRef = useRef();
+    const LeftWallRef = useRef();
+    const RightWallRef = useRef();
+
     let maxScrollValue = 0;
     const mousePos = {
         x: 0,
         y: 0,
     };
+    console.log(mainPosts);
 
     useEffect(() => {
-        function scrollHandler() {
+        const scrollHandler = () => {
             const scrollPercent = pageYOffset / maxScrollValue;
-            const zMove = scrollPercent * 980 - 490;
+            const zMove = scrollPercent * (mainPosts.length * 250 - 130) - 490;
 
-            houseRef;
-
+            LeftWallRef.current.style.transform = `rotateY(90deg) translateZ(-500vw) translateX(${zMove}vw)`;
+            RightWallRef.current.style.transform = `rotateY(90deg) translateZ(-400vw) translateX(${zMove}vw)`;
             houseRef.current.style.transform = `translateZ(${zMove}vw)`;
-        }
+        };
 
-        function mouseMoveHandler(e) {
+        const mouseMoveHandler = (e) => {
             const scrollPercent = pageYOffset / maxScrollValue;
             mousePos.x = -1 + (e.clientX / window.innerWidth) * 2;
             mousePos.y = 1 - (e.clientY / window.innerHeight) * 2;
@@ -130,23 +100,21 @@ const Home = () => {
                     mousePos.x * 12
                 }deg)`;
             }
-        }
+        };
 
         const resizeHandler = () => {
             maxScrollValue = document.body.offsetHeight - window.innerHeight;
         };
 
-        window.addEventListener("resize", resizeHandler);
         resizeHandler();
-
+        window.addEventListener("resize", resizeHandler);
         window.addEventListener("scroll", scrollHandler);
-
         window.addEventListener("mousemove", mouseMoveHandler);
 
         return () => {
             window.removeEventListener("resize", resizeHandler);
             window.removeEventListener("scroll", scrollHandler);
-            window.removeEventListener("mousemove", mouseHandler);
+            window.removeEventListener("mousemove", mouseMoveHandler);
         };
     }, []);
 
@@ -155,24 +123,17 @@ const Home = () => {
             <World>
                 <Stage ref={stageRef}>
                     <House ref={houseRef}>
-                        <LeftWall></LeftWall>
+                        <LeftWall ref={LeftWallRef} />
 
-                        <RightWall></RightWall>
+                        <RightWall ref={RightWallRef} />
 
-                        <FrontWall>
-                            <Content>
-                                <Title>안녕하세요</Title>
-                            </Content>
-                            <SmallRightWall>
-                                <Content>
-                                    <Title>댓글</Title>
-                                </Content>
-                            </SmallRightWall>
-                        </FrontWall>
+                        {mainPosts.map((post, index) => (
+                            <PostWall key={post.id} post={post} postLength={index} />
+                        ))}
                     </House>
                 </Stage>
             </World>
-            <Global />
+            <Global postLength={mainPosts.length} />
         </AppLayout>
     );
 };

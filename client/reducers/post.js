@@ -26,6 +26,54 @@ export const initialState = {
                 },
             ],
         },
+        {
+            id: 2,
+            User: {
+                id: 1,
+                nickname: "ohzz",
+            },
+            content: "두번째 게시글 #해시태그 #익스프레스",
+            Images: [
+                {
+                    src: "https://i.pinimg.com/564x/09/4c/27/094c27bb93bec23a4ce2f22fd5c0758e.jpg",
+                },
+                {
+                    src: "https://i.pinimg.com/564x/d6/52/e9/d652e967b6b2579f2b2078b5974a9f8a.jpg",
+                },
+            ],
+            Comments: [
+                {
+                    User: {
+                        nickname: "ohoh",
+                    },
+                    content: "오우",
+                },
+            ],
+        },
+        {
+            id: 3,
+            User: {
+                id: 1,
+                nickname: "ohzz",
+            },
+            content: "세 번째 게시글 #노드",
+            Images: [
+                {
+                    src: "https://i.pinimg.com/564x/09/4c/27/094c27bb93bec23a4ce2f22fd5c0758e.jpg",
+                },
+                {
+                    src: "https://i.pinimg.com/564x/d6/52/e9/d652e967b6b2579f2b2078b5974a9f8a.jpg",
+                },
+            ],
+            Comments: [
+                {
+                    User: {
+                        nickname: "ohoh",
+                    },
+                    content: "오우",
+                },
+            ],
+        },
     ],
     loadPostsLoading: false, // 게시글(여러개) 불러오기 시도중
     loadPostsDone: false,
