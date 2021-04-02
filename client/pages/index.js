@@ -36,11 +36,11 @@ const LeftWall = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    height: 100vh;
+    height: 130vh;
     background: rgba(255, 255, 255, 0.8);
     transform-style: preserve-3d;
     width: 1000vw;
-    transform: rotateY(90deg) translateZ(-500vw);
+    transform: rotateY(90deg) translateY(-15vh) translateZ(-500vw) translateX(-50vw);
     background: #f8f8f8;
 `;
 
@@ -48,10 +48,10 @@ const RightWall = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    height: 100vh;
+    height: 130vh;
     background: rgba(255, 255, 255, 0.8);
     transform-style: preserve-3d;
-    transform: rotateY(90deg) translateZ(-400vw);
+    transform: rotateY(90deg) translateY(-15vh) translateZ(-400vw) translateX(-50vw);
     background: #f8f8f8;
     width: 1000vw;
 `;
@@ -75,29 +75,28 @@ const Home = () => {
         x: 0,
         y: 0,
     };
-    console.log(mainPosts);
 
     useEffect(() => {
         const scrollHandler = () => {
             const scrollPercent = pageYOffset / maxScrollValue;
-            const zMove = scrollPercent * (mainPosts.length * 250 - 130) - 490;
+            const zMove = scrollPercent * (mainPosts.length * 250 - 150) - 490;
 
-            LeftWallRef.current.style.transform = `rotateY(90deg) translateZ(-500vw) translateX(${zMove}vw)`;
-            RightWallRef.current.style.transform = `rotateY(90deg) translateZ(-400vw) translateX(${zMove}vw)`;
+            LeftWallRef.current.style.transform = `rotateY(90deg) translateZ(-500vw) translateY(-15vh) translateX(${zMove}vw)`;
+            RightWallRef.current.style.transform = `rotateY(90deg) translateZ(-400vw) translateY(-15vh) translateX(${zMove}vw)`;
             houseRef.current.style.transform = `translateZ(${zMove}vw)`;
         };
 
         const mouseMoveHandler = (e) => {
-            const scrollPercent = pageYOffset / maxScrollValue;
             mousePos.x = -1 + (e.clientX / window.innerWidth) * 2;
             mousePos.y = 1 - (e.clientY / window.innerHeight) * 2;
-            if (scrollPercent > 0.05) {
+
+            if (document.body.offsetWidth < 840) {
                 stageRef.current.style.transform = `rotateX(${mousePos.y * 10}deg) rotateY(${
-                    mousePos.x * 25
+                    mousePos.x * 14
                 }deg)`;
             } else {
                 stageRef.current.style.transform = `rotateX(${mousePos.y * 10}deg) rotateY(${
-                    mousePos.x * 12
+                    mousePos.x * 20
                 }deg)`;
             }
         };
@@ -128,7 +127,7 @@ const Home = () => {
                         <RightWall ref={RightWallRef} />
 
                         {mainPosts.map((post, index) => (
-                            <PostWall key={post.id} post={post} postLength={index} />
+                            <PostWall key={post.id} post={post} postIndex={index} />
                         ))}
                     </House>
                 </Stage>
